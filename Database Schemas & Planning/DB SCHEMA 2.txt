@@ -1,0 +1,83 @@
+Table user {
+  Id int [pk , increment]
+  name varchar(80)
+  email varchar(100) [unique]
+  passwordHash varchar(255)
+  roleId int [ref: > role.Id]
+}
+
+Table role{
+  Id int [pk , increment]
+  roleName varchar(50)
+}
+
+Table room{
+  Id int [pk , increment]
+  name varchar(50)
+  location varchar(60)
+  capacity int
+}
+
+Table feature{
+  Id int [pk , increment]
+  featureName varchar(60) [unique]
+}
+
+Table roomFeature {
+  roomId int [ref: > room.Id]
+  featureId int [ref: > feature.Id]
+
+indexes {
+  (roomId , featureId) [pk]
+  }
+
+}
+
+Table meeting {
+  Id int [pk , increment]
+  roomId int [ref: > room.Id]
+  title varchar(100)
+  agenda TEXT
+  start_time datetime
+  end_time datetime
+  createdBy int [ref: > user.Id]
+  createdAt datetime
+  status varchar(40)
+}
+
+Table attendee {
+  meetingId int [ref: > meeting.Id]
+  userId int [ref: > user.Id]
+
+  indexes {
+    (meetingId , userId) [pk]
+  }
+}
+
+
+Table mom{
+  Id int [pk , increment]
+  meetingId int [ref: > meeting.Id]
+  notes text
+  decisions text
+  createdAt datetime
+}
+
+
+Table actionItem{
+  Id int [pk , increment]
+  momId int [ref: > mom.Id]
+  description text
+  assignedTo int [ref: > user.Id]
+  dueDate date
+  status varchar(50)
+}
+
+Table attachment{
+  Id int [pk , increment]
+  momId int [ref: > mom.Id]
+  filePath varchar(255)
+  fileName varchar(255)
+}
+
+

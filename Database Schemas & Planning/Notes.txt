@@ -1,0 +1,9 @@
+
+
+- I have drawn the first schematic for our smart meeting room database and formatted it to the 3rd normal form (3NF).
+
+- This schema is scalable and i have plans to add fields/tables and SQL operations as we 
+progress forward with the development of this system.
+
+
+- Salah

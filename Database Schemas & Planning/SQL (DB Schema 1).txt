@@ -1,0 +1,90 @@
+Table user {
+  userId int [pk , increment]
+  name varchar(50)
+  email varchar(100) [unique]
+  passwordHash varchar(255)
+  roleId int [ref: > role.roleId]
+}
+
+Table role{
+  roleId int [pk , increment]
+  roleName varchar(50)
+}
+
+Table room{
+  roomId int [pk , increment]
+  name varchar(50)
+  location varchar(60)
+  capacity int
+}
+
+Table feature{
+  featureId int [pk , increment]
+  featureName varchar(60) [unique]
+}
+
+Table roomFeature {
+  roomId int [ref: > room.roomId]
+  featureId int [ref: > feature.featureId]
+
+indexes {
+  (roomId , featureId) [pk]
+  }
+
+}
+
+Table booking{
+  bookingId int [pk, increment]
+  userId int [ref: > user.userId]
+  roomId int [ref: > room.roomId]
+  start_time datetime
+  end_time datetime
+  status varchar(40)
+}
+
+
+Table meeting {
+  meetingId int [pk , increment]
+  bookingId int [ref: > booking.bookingId]
+  title varchar(100)
+  agenda TEXT
+  createdBy int [ref: > user.userId]
+  createdAt datetime
+}
+
+Table attendee {
+  meetingId int [ref: > meeting.meetingId]
+  userId int [ref: > user.userId]
+
+  indexes {
+    (meetingId , userId) [pk]
+  }
+}
+
+
+Table mom{
+  momId int [pk , increment]
+  meetingId int [ref: > meeting.meetingId]
+  notes text
+  decisions text
+  createdAt datetime
+}
+
+
+Table actionItem{
+  actionId int [pk , increment]
+  momId int [ref: > mom.momId]
+  description text
+  assignedTo int [ref: > user.userId]
+  dueDate date
+  status varchar(50)
+}
+
+Table attachment{
+  attachmentId int [pk , increment]
+  momId int [ref: > mom.momId]
+  filePath varchar(255)
+  fileName varchar(255)
+}
+
+- Salah Awji
