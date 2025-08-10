@@ -5,6 +5,8 @@
 *.user
 *.suo
 
+git
+
 appsettings.json
 appsettings.Development.json
 
