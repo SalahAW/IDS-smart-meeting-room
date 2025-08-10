@@ -15,21 +15,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SmartMeetingRoomDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Read JWT settings from configuration
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
 builder.Services.AddControllers();
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer" , Options =>
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        Options.TokenValidationParameters = new TokenValidationParameters
+        options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "https://localhost:7032",
-            ValidAudience = "Smart_Meeting_Room_API",
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("Key12"))
+                Encoding.UTF8.GetBytes(jwtSettings["Key"]))
         };
     });
 
@@ -39,7 +42,8 @@ builder.Services.Configure<JsonOptions>(options =>
 });
 
 builder.Services.AddAuthorization();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Swagger/OpenAPI setup
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -47,7 +51,7 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasherBcrypt>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
