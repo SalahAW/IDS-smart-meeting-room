@@ -1,0 +1,18 @@
+# Ignore build output folders
+/bin/
+/obj/
+
+# Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+
+# Ignore config files that may have secrets
+appsettings.json
+appsettings.Development.json
+
+# Ignore HTTP request files (if sensitive)
+/Smart_Meeting_Room_API.http
+
+# Ignore user-specific project files
+*.csproj.user
